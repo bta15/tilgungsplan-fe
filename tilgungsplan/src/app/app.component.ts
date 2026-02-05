@@ -4,7 +4,7 @@ import {TilgungsplanService} from "./service/tilgungsplan.service";
 import {MatCard} from "@angular/material/card";
 import {TilgungsplanEntry, TilgungsplanResponse} from "./entity/tilgungsplan-response";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
-import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
+import { CurrencyPipe, DatePipe } from "@angular/common";
 import {MatFormField, MatHint, MatLabel} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
@@ -30,10 +30,24 @@ const moment = _rollupMoment || _moment;
 @Component({
     selector: 'app-root',
     imports: [
-        RouterOutlet, MatCard, MatHint, NgIf, MatFormField, MatLabel, MatButton, MatIcon, MatIconButton, MatMiniFabButton,
-        MatDatepickerModule, MatInputModule, MatTableModule, FormsModule, ReactiveFormsModule, CurrencyPipe,
-        CurrencyMaskModule, DatePipe
-    ],
+    RouterOutlet,
+    MatCard,
+    MatHint,
+    MatFormField,
+    MatLabel,
+    MatButton,
+    MatIcon,
+    MatIconButton,
+    MatMiniFabButton,
+    MatDatepickerModule,
+    MatInputModule,
+    MatTableModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CurrencyPipe,
+    CurrencyMaskModule,
+    DatePipe
+],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })

@@ -8,17 +8,17 @@
         <input matInput [matDatepicker]="picker" [formControl]="startdatum" name="startdatum">
         <mat-datepicker-toggle matIconSuffix [for]="picker"/>
         <mat-datepicker #picker
-                        startView="multi-year"
-                        (monthSelected)="setMonthAndYear($event, picker)"/>
+          startView="multi-year"
+          (monthSelected)="setMonthAndYear($event, picker)"/>
       </mat-form-field>
 
       <mat-form-field class="inputs">
         <mat-label>Darlehensbetrag</mat-label>
         <input matInput
-               [(ngModel)]="darlehensbetrag"
-               name="darlehensbetrag"
-               placeholder="Darlehensbetrag"
-               currencyMask [options]="{prefix: '', suffix: ' €', thousands: '.', decimal:','}">
+          [(ngModel)]="darlehensbetrag"
+          name="darlehensbetrag"
+          placeholder="Darlehensbetrag"
+          currencyMask [options]="{prefix: '', suffix: ' €', thousands: '.', decimal:','}">
       </mat-form-field>
 
       <mat-form-field class="inputs">
@@ -29,82 +29,83 @@
       <mat-form-field class="inputs">
         <mat-label>anfängliche Tilgung in %</mat-label>
         <input matInput
-               [(ngModel)]="startTilgungProzent"
-               name="startTilgungProzent"
-               placeholder="anfängliche Tilgung (in Prozent)">
+          [(ngModel)]="startTilgungProzent"
+          name="startTilgungProzent"
+          placeholder="anfängliche Tilgung (in Prozent)">
       </mat-form-field>
 
       <mat-form-field class="inputs">
         <mat-label>Zinsbindung in Jahren</mat-label>
         <input matInput
-               [(ngModel)]="zinsbindungJahre"
-               name="zinsbindungJahre"
-               placeholder="Zinsbindung in Jahren">
+          [(ngModel)]="zinsbindungJahre"
+          name="zinsbindungJahre"
+          placeholder="Zinsbindung in Jahren">
       </mat-form-field>
       <br>
-      <div class="plan-erstellen-div">
-        <button mat-button class="plan-erstellen-btn" (click)="onClickPlanErstellen()">Plan erstellen</button>
-      </div>
-    </form>
-  </mat-card>
+        <div class="plan-erstellen-div">
+          <button mat-button class="plan-erstellen-btn" (click)="onClickPlanErstellen()">Plan erstellen</button>
+        </div>
+      </form>
+    </mat-card>
 
-  <mat-card class="app-card">
-    <h4>Ihr Tilgungsplan</h4>
-    @if (!tilgungsplanResponse.tilgungsplanMonate) {
+    <mat-card class="app-card">
+      <h4>Ihr Tilgungsplan</h4>
+      @if (!tilgungsplanResponse.tilgungsplanMonate) {
+        <div>
+          Bitte zuerst die Angaben eintragen und auf "Tilgungsplan erstellen" klicken
+        </div>
+      } @else {
+        <div class="plan-download-div">
+          <button mat-button class="plan-erstellen-btn" (click)="onClickPrintTable()">Tilgungsplan als PDF herunterladen</button>
+        </div>
+      }
+
+      @if (tilgungsplanResponse && tilgungsplanResponse.tilgungsplanMonate) {
+        <div class="mat-elevation-z8 plan-tabelle">
+          <table mat-table [dataSource]="dataSource" id="tabelle">
+            <ng-container matColumnDef="datum">
+              <th mat-header-cell *matHeaderCellDef> Datum</th>
+              <td mat-cell *matCellDef="let element"> {{ element.datum | date }}</td>
+              <td mat-footer-cell *matFooterCellDef> Zinsbindungsende</td>
+            </ng-container>
+            <ng-container matColumnDef="restschuldEuro">
+              <th mat-header-cell *matHeaderCellDef> Restschuld</th>
+              <td mat-cell *matCellDef="let element"> {{ element.restschuldEuro | currency:'EUR':'symbol' }}</td>
+              <td mat-footer-cell
+                *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.restschuldEuro | currency:'EUR':'symbol' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="zinsenEuro">
+              <th mat-header-cell *matHeaderCellDef> Zinsen</th>
+              <td mat-cell *matCellDef="let element"> {{ element.zinsenEuro | currency:'EUR':'symbol' }}</td>
+              <td mat-footer-cell
+                *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.zinsenEuro | currency:'EUR':'symbol' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="tilgungAuszahlungEuro">
+              <th mat-header-cell *matHeaderCellDef> Tilgung(+)/Auszahlung(-)</th>
+              <td mat-cell *matCellDef="let element"> {{ element.tilgungAuszahlungEuro | currency:'EUR':'symbol' }}</td>
+              <td mat-footer-cell
+                *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.tilgungAuszahlungEuro | currency:'EUR':'symbol' }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="rateEuro">
+              <th mat-header-cell *matHeaderCellDef> Rate</th>
+              <td mat-cell *matCellDef="let element"> {{ element.rateEuro | currency:'EUR':'symbol' }}</td>
+              <td mat-footer-cell
+                *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.rateEuro | currency:'EUR':'symbol' }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+          </table>
+        </div>
+      }
       <div>
-        Bitte zuerst die Angaben eintragen und auf "Tilgungsplan erstellen" klicken
+
       </div>
-    } @else {
-      <div class="plan-download-div">
-        <button mat-button class="plan-erstellen-btn" (click)="onClickPrintTable()">Tilgungsplan als PDF herunterladen</button>
-      </div>
-    }
+    </mat-card>
+  </main>
 
-    <div class="mat-elevation-z8 plan-tabelle" *ngIf="tilgungsplanResponse && tilgungsplanResponse.tilgungsplanMonate">
-      <table mat-table [dataSource]="dataSource" id="tabelle">
-        <ng-container matColumnDef="datum">
-          <th mat-header-cell *matHeaderCellDef> Datum</th>
-          <td mat-cell *matCellDef="let element"> {{ element.datum | date }}</td>
-          <td mat-footer-cell *matFooterCellDef> Zinsbindungsende</td>
-        </ng-container>
-        <ng-container matColumnDef="restschuldEuro">
-          <th mat-header-cell *matHeaderCellDef> Restschuld</th>
-          <td mat-cell *matCellDef="let element"> {{ element.restschuldEuro | currency:'EUR':'symbol' }}</td>
-          <td mat-footer-cell
-              *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.restschuldEuro | currency:'EUR':'symbol' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="zinsenEuro">
-          <th mat-header-cell *matHeaderCellDef> Zinsen</th>
-          <td mat-cell *matCellDef="let element"> {{ element.zinsenEuro | currency:'EUR':'symbol' }}</td>
-          <td mat-footer-cell
-              *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.zinsenEuro | currency:'EUR':'symbol' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="tilgungAuszahlungEuro">
-          <th mat-header-cell *matHeaderCellDef> Tilgung(+)/Auszahlung(-)</th>
-          <td mat-cell *matCellDef="let element"> {{ element.tilgungAuszahlungEuro | currency:'EUR':'symbol' }}</td>
-          <td mat-footer-cell
-              *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.tilgungAuszahlungEuro | currency:'EUR':'symbol' }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="rateEuro">
-          <th mat-header-cell *matHeaderCellDef> Rate</th>
-          <td mat-cell *matCellDef="let element"> {{ element.rateEuro | currency:'EUR':'symbol' }}</td>
-          <td mat-footer-cell
-              *matFooterCellDef> {{ tilgungsplanResponse.tilgungsplanEnde.rateEuro | currency:'EUR':'symbol' }}
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
-      </table>
-    </div>
-    <div>
-
-    </div>
-  </mat-card>
-</main>
-
-<router-outlet/>
+  <router-outlet/>
