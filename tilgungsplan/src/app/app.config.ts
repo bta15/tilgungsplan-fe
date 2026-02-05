@@ -2,7 +2,7 @@ import {ApplicationConfig, importProvidersFrom, LOCALE_ID} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
-import {provideHttpClient, withFetch} from "@angular/common/http";
+import { provideHttpClient, withFetch } from "@angular/common/http";
 import {provideAnimations} from "@angular/platform-browser/animations";
 import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 import {ReactiveFormsModule} from "@angular/forms";
