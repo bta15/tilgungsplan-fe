@@ -28,15 +28,14 @@ import autoTable from "jspdf-autotable"; //workaround für ein moment-Bug, da so
 const moment = _rollupMoment || _moment;
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet, MatCard, MatHint, NgIf, MatFormField, MatLabel, MatButton, MatIcon, MatIconButton, MatMiniFabButton,
-    MatDatepickerModule, MatInputModule, MatTableModule, FormsModule, ReactiveFormsModule, CurrencyPipe,
-    CurrencyMaskModule, DatePipe
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    imports: [
+        RouterOutlet, MatCard, MatHint, NgIf, MatFormField, MatLabel, MatButton, MatIcon, MatIconButton, MatMiniFabButton,
+        MatDatepickerModule, MatInputModule, MatTableModule, FormsModule, ReactiveFormsModule, CurrencyPipe,
+        CurrencyMaskModule, DatePipe
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   darlehensbetrag: number = 100000.0;
